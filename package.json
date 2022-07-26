@@ -1,0 +1,29 @@
+{
+  "name": "gitfolio-server-side-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Creatorrr1/GitFolio-Server-Side-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Creatorrr1/GitFolio-Server-Side-/issues"
+  },
+  "homepage": "https://github.com/Creatorrr1/GitFolio-Server-Side-#readme",
+  "dependencies": {
+    "@prisma/client": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  }
+}

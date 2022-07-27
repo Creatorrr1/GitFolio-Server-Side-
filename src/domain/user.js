@@ -26,7 +26,7 @@ export default class User {
       email
     } = json
 
-    console.log('json in fromJson -> ' , userName,
+    console.log('json in .fromJson -> ' , 'json data retrieved from req -> ',userName,
     password,
     email)
 

@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Creatorrr1/GitFolio-Server-Side-#readme",
   "dependencies": {
-    "@prisma/client": "^4.1.0",
+    "@prisma/client": "^4.1.1",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",

@@ -103,6 +103,10 @@ export default class User {
     return User._findByUnique('email', email)
   }
 
+  static async findByUsername(username) {
+    return User._findByUnique('userName', username)
+  }
+
   static async findById(id) {
     return User._findByUnique('id', id)
   }

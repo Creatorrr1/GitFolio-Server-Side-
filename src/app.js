@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/user', userRouter)
 app.use('/users', userRouter)
-app.use('/sign-in', authRouter)
+app.use('/login', authRouter)
 
 app.get('*', (req, res) => {
     res.status(404).json({

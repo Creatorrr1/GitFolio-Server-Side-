@@ -4,7 +4,15 @@ import { sendDataResponse, sendMessageResponse } from '../utils/responses.js';
 import { JWT_EXPIRY, JWT_SECRET } from '../utils/config.js';
 
 export const create = async (req, res) => {
-  const userToCreate = await User.fromJson(req.body)
+  // const userToCreate = req.body
+  console.log('user', req.body)
+  const { username, password, email} = req.body
+
+  const userToCreate = {
+    username,
+    password,
+    email
+  }
 
   try {
     const existingUser = await User.findByEmail(userToCreate.email)
@@ -13,14 +21,16 @@ export const create = async (req, res) => {
       return sendDataResponse(res, 400, { email: 'Email already in use' })
     }
 
-    const createdUser = await userToCreate.save()
+    const user = await User.fromJson(userToCreate)
+
+    const createdUser = await user.save()
     console.log('createdUser: ',createdUser)
 
     const token = generateJwt(createdUser.id)
 
-    return sendDataResponse(res, 200, { token, ...createdUser.toJSON() })
+    return sendDataResponse(res, 200, { token, ...createdUser })
   } catch (error) {
-    console.log('about to create user', userToCreate.userName, userToCreate.password, userToCreate.email)
+    // console.log('about to create user', userToCreate.userName, userToCreate.password, userToCreate.email)
     console.error('something went wrong', error.message)
     return sendMessageResponse(res, 500, 'Unable to create new user')
   }

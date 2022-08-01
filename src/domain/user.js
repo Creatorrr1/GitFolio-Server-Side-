@@ -21,12 +21,12 @@ export default class User {
 
   static async fromJson(json) {
     const {
-      userName,
+      username,
       password,
       email
     } = json
 
-    console.log('json in .fromJson -> ' , 'json data retrieved from req -> ',userName,
+    console.log('json in .fromJson -> ' , 'json data retrieved from req -> ',username,
     password,
     email)
 
@@ -39,7 +39,7 @@ export default class User {
     return new User(
         // id would be null since it's shouldn't be assigned here
         null,
-        userName,
+        username,
         passwordHash,
         email
     )
@@ -47,25 +47,25 @@ export default class User {
 
   constructor(
     id,
-    userName,
+    username,
     passwordHash,
     email
   ) {
     this.id = id
-    this.userName = userName
+    this.username = username
     this.passwordHash = passwordHash
     this.email = email
   }
 
-  toJSON() {
-    return {
-      user: {
-        id: this.id,
-        userName: this.userName,
-        email: this.email
-      }
-    }
-  }
+  // toJSON() {
+  //   return {
+  //     user: {
+  //       id: this.id,
+  //       userName: this.username,
+  //       email: this.email
+  //     }
+  //   }
+  // }
 
   /**
    * @returns {User}
@@ -75,7 +75,7 @@ export default class User {
     console.log("IN the domain save func")
     const createdUser = await dbClient.user.create({
       data: {
-          userName: this.userName,
+          userName: this.username,
           password: this.passwordHash,
           email: this.email
       }
@@ -90,7 +90,7 @@ export default class User {
         id: this.id
       },
       data: {
-        userName: this.userName,
+        userName: this.username,
         password: this.passwordHash,
         email: this.email
       }

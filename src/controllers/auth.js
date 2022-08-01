@@ -5,7 +5,9 @@ import { JWT_EXPIRY, JWT_SECRET } from '../utils/config.js'
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js'
 
 export const login = async (req, res) => {
-  const { username, password } = req.body
+  const { username, password, email } = req.body
+
+  console.log('/login req',req.body)
 
   if (!username || !password) {
     return sendDataResponse(res, 401, {
@@ -14,8 +16,19 @@ export const login = async (req, res) => {
   }
 
   try {
-    const foundUser = await User.findByUsername(username)
+    const foundUser = await User.findByEmail(email)
+    
+    if(foundUser === null) {
+        return sendDataResponse( res, 401, {
+            user: 'Invalid, user does not exist'
+        })
+    }
+
     const areCredentialsValid = await validateCredentials(password, foundUser)
+    
+    console.log('areCredentialsValid', areCredentialsValid)
+    console.log(foundUser)
+
 
     if (!areCredentialsValid) {
       return sendDataResponse(res, 401, {
@@ -25,7 +38,7 @@ export const login = async (req, res) => {
 
     const token = generateJwt(foundUser.id)
 
-    return sendDataResponse(res, 200, { token, ...foundUser.toJSON() })
+    return sendDataResponse(res, 200, { token, ...foundUser })
   } catch (e) {
     return sendMessageResponse(res, 500, 'Unable to process request')
   }
@@ -36,18 +49,15 @@ function generateJwt(userId) {
 }
 
 async function validateCredentials(password, user) {
-  if (!user) {
-    return false
-  }
+  console.log('in validate() -> user : ', user)
 
   if (!password) {
     return false
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
-  if (!isPasswordValid) {
-    return false
-  }
 
-  return true
+  console.log(`passwordValid = ${isPasswordValid ? 'yes' : 'no'}`)
+
+  return isPasswordValid
 }

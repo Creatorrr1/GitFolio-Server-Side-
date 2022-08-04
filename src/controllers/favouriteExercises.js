@@ -2,19 +2,21 @@ import { sendDataResponse } from '../utils/responses.js'
 import Exercise from '../domain/favouriteExercises.js'
 
 export const create = async (req, res) => {
-  const { content } = req.body
+  const { githubImage, githubUrl } = req.body
 
   try {
-    if (!content) {
-      throw new Error('Please provide content')
-    }
-    const exerciseToCreate = await Exercise.fromJson(req.body)
-    exerciseToCreate.userId = req.user.id
+    // if (!githubUrl) {
+    //   throw new Error('Please provide content')
+    // }
+    const exerciseToCreate = await Exercise.fromJson(githubImage, githubUrl)
+    console.log(exerciseToCreate)
+    // exerciseToCreate.userId = req.user.id
 
     const favouriteExercise = await exerciseToCreate.save()
+    console.log(favouriteExercise)
     return sendDataResponse(res, 201, favouriteExercise)
   } catch (err) {
-    return sendDataResponse(res, 400, { err: err.message })
+    return sendDataResponse(res, 401, { err: err.message })
   }
 }
 

@@ -3,42 +3,46 @@ import dbClient from '../utils/dbClient.js'
 export default class Exercise {
   static fromDb(exercise) {
     return new Exercise(
-      exercise.content,
       exercise.id,
+      exercise.githubImage,
+      exercise.githubUrl,
       exercise.createdAt,
-      exercise.user,
       exercise.profile,
+    //   exercise.userId,
     //   exercise.edited
     )
   }
 
-  static async fromJson(json) {
-    const { content } = json
-    return new Exercise(content)
+  static async fromJson(githubImage, githubUrl) {
+    // const { githubImage, githubUrl } = json
+    return new Exercise(githubImage, githubUrl)
   }
 
   constructor(
-    content,
-    id,
+      githubImage,
+      githubUrl,
+      id,
     createdAt,
-    user,
     profile,
+    // user,
     // edited,
   ) {
-    this.content = content
+    this.githubImage = githubImage
+    this.githubUrl = githubUrl
     this.id = id
     this.createdAt = createdAt
-    this.user = user
-    this.profile = profile
+    this.profileId = profile
+    // this.userId = user
     // this.edited = edited
   }
 
   async save() {
     const createdFavouriteExercise = await dbClient.exercise.create({
       data: {
-        content: this.content,
-        userId: this.userId,
-        createdAt: this.createdAt
+        githubImage: this.githubImage,
+        githubUrl: this.githubUrl,
+        // userId: this.userId,
+        // createdAt: this.createdAt
       },
       include: { user: { include: { profile: true } } }
     })

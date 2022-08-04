@@ -27,7 +27,7 @@ export const login = async (req, res) => {
     const areCredentialsValid = await validateCredentials(password, foundUser)
     
     console.log('areCredentialsValid', areCredentialsValid)
-    console.log(foundUser)
+    console.log('FOUNDUSER ---> ',foundUser)
 
 
     if (!areCredentialsValid) {
@@ -38,7 +38,17 @@ export const login = async (req, res) => {
 
     const token = generateJwt(foundUser.id)
 
-    return sendDataResponse(res, 200, { token, ...foundUser })
+    return sendDataResponse(res, 200, { token, 
+        data: {
+            id: foundUser.id,
+            username: foundUser.username, 
+            email: foundUser.email, 
+            firstname: foundUser.firstName, 
+            lastname: foundUser.lastName,
+            bio: foundUser.bio,
+            profileImage: foundUser.profileImage
+        } 
+    })
   } catch (e) {
     return sendMessageResponse(res, 500, 'Unable to process request')
   }

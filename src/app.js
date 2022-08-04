@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import userRouter from './routes/user.js'
 import authRouter from './routes/auth.js'
+import favoriteExerciseRouter from './routes/favouriteExercises.js'
 
 const app = express()
 app.disable('x-powered-by')
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/user', userRouter)
 app.use('/users', userRouter)
 app.use('/login', authRouter)
+app.use('/favouriteExercises', favoriteExerciseRouter)
 
 app.get('*', (req, res) => {
     res.status(404).json({

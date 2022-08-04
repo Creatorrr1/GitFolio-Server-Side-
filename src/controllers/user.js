@@ -5,14 +5,23 @@ import { JWT_EXPIRY, JWT_SECRET } from '../utils/config.js';
 
 export const create = async (req, res) => {
   // const userToCreate = req.body
-  console.log('user', req.body)
-  const { username, password, email} = req.body
+  // console.log('user', req.body)
+  const { username, password, email, firstname, lastname, bio, profileImage} = req.body
+
+  const firstName = firstname
+  const lastName = lastname
 
   const userToCreate = {
     username,
     password,
-    email
+    email,
+    firstName,
+    lastName,
+    bio,
+    profileImage
   }
+
+  console.log('userToCreate -> ', userToCreate)
 
   try {
     const existingUser = await User.findByEmail(userToCreate.email)
@@ -22,6 +31,8 @@ export const create = async (req, res) => {
     }
 
     const user = await User.fromJson(userToCreate)
+
+    console.log('Trying to create user -> ', user)
 
     const createdUser = await user.save()
     console.log('createdUser: ',createdUser)
@@ -40,6 +51,18 @@ function generateJwt(userId) {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRY })
 }
 
-// export const getAll = async (req, res) => {
-//   return 'Works';
-// };
+export const getById = async (req, res) => {
+  const id = parseInt(req.params.id)
+
+  try {
+    const foundUser = await User.findById(id)
+
+    if (!foundUser) {
+      return sendDataResponse(res, 404, { id: 'User not found' })
+    }
+
+    return sendDataResponse(res, 200, foundUser)
+  } catch (e) {
+    return sendMessageResponse(res, 500, 'Unable to get user')
+  }
+}

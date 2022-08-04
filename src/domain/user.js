@@ -11,11 +11,16 @@ export default class User {
    * @returns {User}
    */
   static fromDb(user) {
+    console.log('dbUser ---> ',user)
     return new User(
       user.id,
       user.userName,
       user.password,
-      user.email
+      user.email,
+      user.profile.firstName,
+      user.profile.lastName,
+      user.profile.bio,
+      user.profile.profileImage
     )
   }
 
@@ -23,7 +28,11 @@ export default class User {
     const {
       username,
       password,
-      email
+      email,
+      firstName,
+      lastName,
+      bio,
+      profileImage
     } = json
 
     console.log('json in .fromJson -> ' , 'json data retrieved from req -> ',username,
@@ -41,7 +50,11 @@ export default class User {
         null,
         username,
         passwordHash,
-        email
+        email,
+        firstName,
+        lastName,
+        bio,
+        profileImage
     )
   }
 
@@ -49,12 +62,20 @@ export default class User {
     id,
     username,
     passwordHash,
-    email
+    email,
+    firstName,
+    lastName,
+    bio,
+    profileImage
   ) {
     this.id = id
     this.username = username
     this.passwordHash = passwordHash
     this.email = email
+    this.firstName = firstName
+    this.lastName = lastName
+    this.bio = bio
+    this.profileImage = profileImage
   }
 
   // toJSON() {
@@ -77,10 +98,20 @@ export default class User {
       data: {
           userName: this.username,
           password: this.passwordHash,
-          email: this.email
-      }
+          email: this.email,
+          profile: {
+            create: {
+              firstName: this.firstName,
+              lastName: this.lastName,
+              bio: this.bio,
+              profileImage: this.profileImage
+            }
+          }
+      },
+        include: {
+          profile: true
+        }
     })
-
     return User.fromDb(createdUser)
   }
 
@@ -119,6 +150,9 @@ export default class User {
     const foundUser = await dbClient.user.findUnique({
       where: {
         [key]: value
+      },
+      include: {
+        profile: true
       }
     })
 

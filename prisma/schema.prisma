@@ -26,6 +26,7 @@ model Profile {
   firstName          String
   lastName           String
   bio                String?
+  profileImage       String?
   user               User                @relation(fields: [userId], references: [id])
   userId             Int                 @unique
   createdAt          DateTime            @default(now())

@@ -6,14 +6,14 @@ export const create = async (req, res) => {
 
   try {
     // if (!githubUrl) {
-    //   throw new Error('Please provide content')
+    //   throw new Error('Please provide gitHubUrl')
     // }
     const exerciseToCreate = await Exercise.fromJson(githubImage, githubUrl)
     console.log(exerciseToCreate)
     // exerciseToCreate.userId = req.user.id
 
     const favouriteExercise = await exerciseToCreate.save()
-    console.log(favouriteExercise)
+    // console.log(favouriteExercise)
     return sendDataResponse(res, 201, favouriteExercise)
   } catch (err) {
     return sendDataResponse(res, 401, { err: err.message })

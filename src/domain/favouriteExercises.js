@@ -6,8 +6,9 @@ export default class Exercise {
       exercise.id,
       exercise.githubImage,
       exercise.githubUrl,
-      exercise.createdAt,
       exercise.profile,
+      exercise.createdAt,
+      exercise.updatedAt,
     //   exercise.userId,
     //   exercise.edited
     )
@@ -19,11 +20,12 @@ export default class Exercise {
   }
 
   constructor(
-      githubImage,
-      githubUrl,
-      id,
-    createdAt,
+    githubImage,
+    githubUrl,
+    id,
     profile,
+    createdAt,
+    updatedAt,
     // user,
     // edited,
   ) {
@@ -31,6 +33,7 @@ export default class Exercise {
     this.githubUrl = githubUrl
     this.id = id
     this.createdAt = createdAt
+    this.updatedAt = updatedAt
     this.profileId = profile
     // this.userId = user
     // this.edited = edited
@@ -43,8 +46,9 @@ export default class Exercise {
         githubUrl: this.githubUrl,
         // userId: this.userId,
         // createdAt: this.createdAt
+        // updatedAt: this.updatedAt,
       },
-      include: { user: { include: { profile: true } } }
+      include: { profile: true }
     })
     return Exercise.fromDb(createdFavouriteExercise)
   }

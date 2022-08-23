@@ -2,13 +2,13 @@ import { sendDataResponse } from '../utils/responses.js'
 import Exercise from '../domain/favouriteExercises.js'
 
 export const create = async (req, res) => {
-  const { githubImage, githubUrl } = req.body
+  const { githubImage, githubUrl, profileId } = req.body
 
   try {
     // if (!githubUrl) {
     //   throw new Error('Please provide gitHubUrl')
     // }
-    const exerciseToCreate = await Exercise.fromJson(githubImage, githubUrl)
+    const exerciseToCreate = await Exercise.fromJson(githubImage, githubUrl, profileId)
     console.log(exerciseToCreate)
     // exerciseToCreate.userId = req.user.id
 
@@ -31,4 +31,15 @@ export const getAll = async (req, res) => {
     } catch (err) {
       return sendDataResponse(res, 400, { err: err.message })
     }
+}
+
+export const deleteFExercise = async (req, res) => {
+  const exerciseId = +req.params.id
+  try {
+    if (!exerciseId) throw new Error('The ID you have provided is incorrect')
+    const data = await Exercise.delete(exerciseId)
+    return sendDataResponse(res, 200, data)
+  } catch (err) {
+    return sendDataResponse(res, 400, { err: err.message })
   }
+}

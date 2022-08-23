@@ -1,13 +1,15 @@
 import { Router } from 'express'
 import {
   create,
-  getAll
+  getAll,
+  deleteFExercise
 } from '../controllers/favouriteExercises.js'
-// import { validateAuthentication } from '../middleware/auth.js'
+import { validateAuthentication } from '../middleware/auth.js'
 
 const router = Router()
 
-router.post('/', create)
-router.get('/', getAll)
+router.post('/', validateAuthentication ,create)
+router.get('/' ,getAll)
+router.delete('/:id', validateAuthentication, deleteFExercise)
 
 export default router

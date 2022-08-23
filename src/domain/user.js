@@ -20,7 +20,8 @@ export default class User {
       user.profile.firstName,
       user.profile.lastName,
       user.profile.bio,
-      user.profile.profileImage
+      user.profile.profileImage,
+      user.profile.id,
     )
   }
 
@@ -66,7 +67,8 @@ export default class User {
     firstName,
     lastName,
     bio,
-    profileImage
+    profileImage,
+    profileId
   ) {
     this.id = id
     this.username = username
@@ -76,6 +78,7 @@ export default class User {
     this.lastName = lastName
     this.bio = bio
     this.profileImage = profileImage
+    this.profileId = profileId
   }
 
   // toJSON() {

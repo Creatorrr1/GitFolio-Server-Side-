@@ -3,10 +3,10 @@ import dbClient from '../utils/dbClient.js'
 export default class Exercise {
   static fromDb(exercise) {
     return new Exercise(
-      exercise.id,
       exercise.githubImage,
       exercise.githubUrl,
       exercise.profile,
+      exercise.id,
       exercise.createdAt,
       exercise.updatedAt,
     //   exercise.userId,
@@ -14,16 +14,16 @@ export default class Exercise {
     )
   }
 
-  static async fromJson(githubImage, githubUrl) {
+  static async fromJson(githubImage, githubUrl, profileId) {
     // const { githubImage, githubUrl } = json
-    return new Exercise(githubImage, githubUrl)
+    return new Exercise(githubImage, githubUrl, profileId)
   }
 
   constructor(
     githubImage,
     githubUrl,
-    id,
     profile,
+    id,
     createdAt,
     updatedAt,
     // user,
@@ -32,19 +32,19 @@ export default class Exercise {
     this.githubImage = githubImage
     this.githubUrl = githubUrl
     this.id = id
+    this.profileId = profile
     this.createdAt = createdAt
     this.updatedAt = updatedAt
-    this.profileId = profile
     // this.userId = user
     // this.edited = edited
   }
 
   async save() {
-    const createdFavouriteExercise = await dbClient.exercise.create({
+    const createdFavouriteExercise = await dbClient.favouriteExercise.create({
       data: {
         githubImage: this.githubImage,
         githubUrl: this.githubUrl,
-        // userId: this.userId,
+        profileId: this.profileId
         // createdAt: this.createdAt
         // updatedAt: this.updatedAt,
       },
@@ -75,17 +75,17 @@ export default class Exercise {
   }
 
   static async _findMany() {
-    const foundExercise = await dbClient.exercise.findMany({
-      orderBy: { createdAt: 'desc' },
+    const foundExercise = await dbClient.favouriteExercise.findMany({
+      orderBy: { createdAt: 'asc' },
       include: {
-        user: { include: { profile: true } },
+        profile: true,
       }
     })
     return foundExercise.map((exercise) => Exercise.fromDb(exercise))
   }
 
   static async delete(foundId) {
-    await dbClient.exercise.delete({
+    await dbClient.favouriteExercise.delete({
       where: {
         id: foundId
       }

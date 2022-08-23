@@ -66,3 +66,36 @@ export const getById = async (req, res) => {
     return sendMessageResponse(res, 500, 'Unable to get user')
   }
 }
+
+export const getAll = async (req, res) => {
+  const {
+    first_name: firstName,
+    cohort: inCohort,
+    cohort_id: cohortId
+  } = req.query
+
+  const whereData = {}
+  if (inCohort === 'false') {
+    whereData.cohort = null
+  }
+
+  if (cohortId) {
+    whereData.cohortId = Number(cohortId)
+  }
+
+  let foundUsers
+
+  if (firstName) {
+    foundUsers = await User.findManyByFirstName(firstName)
+  } else {
+    foundUsers = await User.findAll({ whereData })
+  }
+
+  const formattedUsers = foundUsers.map((user) => {
+    return {
+      ...user.toJSON().user
+    }
+  })
+
+  return sendDataResponse(res, 200, { users: formattedUsers })
+}

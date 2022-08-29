@@ -187,3 +187,9 @@ export default class User {
     return foundUsers.map((user) => User.fromDb(user))
   }
 }
+
+export async function getAllUsers() {
+  const Users = await dbClient.user.findMany({})
+
+  return Users
+}

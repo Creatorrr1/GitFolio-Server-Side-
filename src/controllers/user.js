@@ -1,4 +1,5 @@
 import User from '../domain/user.js';
+import { getAllUsers } from '../domain/user.js';
 import jwt from 'jsonwebtoken';
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js';
 import { JWT_EXPIRY, JWT_SECRET } from '../utils/config.js';
@@ -68,34 +69,11 @@ export const getById = async (req, res) => {
 }
 
 export const getAll = async (req, res) => {
-  const {
-    first_name: firstName,
-    cohort: inCohort,
-    cohort_id: cohortId
-  } = req.query
+  try {
+    const allUsers = await getAllUsers()
 
-  const whereData = {}
-  if (inCohort === 'false') {
-    whereData.cohort = null
+    return sendDataResponse(res, 201, allUsers)
+  } catch (e) {
+    return sendMessageResponse(res, 500, 'Unable to get users')
   }
-
-  if (cohortId) {
-    whereData.cohortId = Number(cohortId)
-  }
-
-  let foundUsers
-
-  if (firstName) {
-    foundUsers = await User.findManyByFirstName(firstName)
-  } else {
-    foundUsers = await User.findAll({ whereData })
-  }
-
-  const formattedUsers = foundUsers.map((user) => {
-    return {
-      ...user.toJSON().user
-    }
-  })
-
-  return sendDataResponse(res, 200, { users: formattedUsers })
 }

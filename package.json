@@ -6,6 +6,9 @@
   "scripts": {
     "start": "nodemon src/index.js"
   },
+  "engines": {
+    "node": "16.13.2"
+  },
   "repository": {
     "url": "git+https://github.com/Creatorrr1/GitFolio-Server-Side-.git"
   },
